@@ -46,33 +46,51 @@ function render(){
 function next_state(){
 	render();
 
-	for(var i =1; i < MAX_X - 1; i ++){
+	for(var i =0; i < MAX_X - 1; i ++){
 		for(var j =1; j < MAX_Y - 1; j ++){
 			var count = 0;
 
-			if (map[i-1][j])
-				count++;
+			if (i == 0){
+				if (map[MAX_X-1][j])
+					count++;}
+			else{
+				if (map[i-1][j])
+					count++;}
+
 			if (map[i][j-1])
 				count++;
 			if (map[i+1][j])
 				count++;
 			if (map[i][j+1])
 				count++;
-			if (map[i-1][j-1])
-				count++;
+			
+			if (i == 0){
+				if (map[MAX_X-1][j-1])
+					count++;
+			}
+			else {
+				if (map[i-1][j-1])
+					count++;
+}
 			if (map[i+1][j+1])
 				count++;
 			if (map[i+1][j-1])
 				count++;
-			if (map[i-1][j+1])
-				count++;
-
+			
+			if (i == 0){
+				if (map[MAX_X-1][j+1])
+					count++;
+			}
+			else {
+				if (map[i-1][j+1])
+					count++;
+				}
 
 			states[i][j] = count;
 		}	
 	}
 
-	for(var i =1; i < MAX_X - 1; i ++){
+	for(var i =0; i < MAX_X - 1; i ++){
 		for(var j =1; j < MAX_Y - 1; j ++){
 			if (map[i][j] == false){
 				if (states[i][j] == 3)
