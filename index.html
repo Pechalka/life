@@ -1,0 +1,148 @@
+<html>
+<head>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<style type="text/css">
+
+table tr td {
+	font-size: 30px;	
+}
+td{
+	border: solid black 1px;
+	cursor: pointer;
+}
+	</style>
+	<script type="text/javascript">
+	var map = [], 
+		states = [],
+		MAX_X = 20,
+		MAX_Y = 20;
+
+function render(){
+	$('#debug').empty();
+	for(var i =0; i < MAX_X; i ++){
+		var tr = $('<tr>');
+		for(var j =0; j < MAX_Y; j ++){
+			tr.append($('<td>')
+				.html( states[i][j] )
+				);	
+		}	
+		$('#debug').append(tr)
+	}
+
+	$('#world').empty();
+	for(var i =0; i < MAX_X; i ++){
+		var tr = $('<tr>');
+		for(var j =0; j < MAX_Y; j ++){
+			tr.append($('<td>')
+				.html( map[i][j] ? '*' : '&nbsp;&nbsp;')
+				.data('x', i)
+				.data('y', j)
+				);	
+		}	
+		$('#world').append(tr)
+	}
+}
+
+function next_state(){
+	render();
+
+	for(var i =1; i < MAX_X - 1; i ++){
+		for(var j =1; j < MAX_Y - 1; j ++){
+			var count = 0;
+
+			if (map[i-1][j])
+				count++;
+			if (map[i][j-1])
+				count++;
+			if (map[i+1][j])
+				count++;
+			if (map[i][j+1])
+				count++;
+			if (map[i-1][j-1])
+				count++;
+			if (map[i+1][j+1])
+				count++;
+			if (map[i+1][j-1])
+				count++;
+			if (map[i-1][j+1])
+				count++;
+
+
+			states[i][j] = count;
+		}	
+	}
+
+	for(var i =1; i < MAX_X - 1; i ++){
+		for(var j =1; j < MAX_Y - 1; j ++){
+			if (map[i][j] == false){
+				if (states[i][j] == 3)
+					map[i][j] = true;
+			}
+			else
+				map[i][j] = states[i][j] == 2 || states[i][j] == 3;
+			}
+	}
+
+}
+
+function init(){
+	for(var i =0; i < MAX_X; i ++){
+		map.push([]);
+		for(var j =0; j < MAX_Y; j ++){
+			map[i][j] = false ;
+		}	
+	}
+
+	map[4][4]=true;         // *
+	map[5][4]=true;         // * *
+	map[6][4]=true;         // **
+	map[6][5]=true;
+	map[5][6]=true;
+
+
+	for(var i =0; i < MAX_X; i ++){
+		states.push([]);
+		for(var j =0; j < MAX_Y; j ++){
+			states[i][j] = 0;
+		}	
+	}	
+}
+
+
+$(function() {
+	init();
+	render();
+
+	$('#start').click(function(){
+		setInterval(next_state, 300);
+	});
+
+	$('#world td').live('click', function(){
+		var td = $(this);
+		
+		var i = td.data('x'),
+			j = td.data('y');
+
+		map[i][j] = !map[i][j];
+
+		$(this).html( map[i][j] ? '*' : '&nbsp;&nbsp;');
+	});
+});
+	</script>
+</head>
+<body>
+	<input type='button' value='start' id="start">
+	<div style="clear: both">
+	</div>	
+	<div style="float : left">
+		<table border="0" id="world" border="1px">		
+		</table>
+	</div>
+	<div style="float : right">
+		<table border="0" id="debug"  border="1px">		
+		</table>
+	</div>
+	<div style="clear: both" >
+	</div>	
+</body>
+</html>
