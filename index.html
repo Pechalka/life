@@ -46,52 +46,41 @@ function render(){
 function next_state(){
 	render();
 
-	for(var i =0; i < MAX_X - 1; i ++){
-		for(var j =1; j < MAX_Y - 1; j ++){
+	for(var i =0; i < MAX_X; i ++){
+		for(var j =0; j < MAX_Y; j ++){
 			var count = 0;
 
-			if (i == 0){
-				if (map[MAX_X-1][j])
-					count++;}
-			else{
-				if (map[i-1][j])
-					count++;}
+			if (map[i == 0 ? MAX_X-1 : i-1 ][j])
+					count++;
 
-			if (map[i][j-1])
+			if (map[i == 0 ? MAX_X-1 : i-1][j==MAX_Y-1?0:j+1])
 				count++;
-			if (map[i+1][j])
+
+			if (map[i == 0 ? MAX_X-1 : i-1][j == 0?MAX_Y-1:j-1])
 				count++;
-			if (map[i][j+1])
+
+			if (map[i == MAX_X-1 ? 0 : i+1 ][j])
+				count++;
+
+			if (map[i == MAX_X-1 ? 0 : i+1][j==MAX_Y-1?0:j+1])
+				count++;
+			if (map[i == MAX_X-1 ? 0 : i+1][j == 0?MAX_Y-1:j-1])
+				count++;
+
+
+			if (map[i][j == 0?MAX_Y-1:j-1])
+				count++;
+			if (map[i][j==MAX_Y-1?0:j+1])
 				count++;
 			
-			if (i == 0){
-				if (map[MAX_X-1][j-1])
-					count++;
-			}
-			else {
-				if (map[i-1][j-1])
-					count++;
-}
-			if (map[i+1][j+1])
-				count++;
-			if (map[i+1][j-1])
-				count++;
-			
-			if (i == 0){
-				if (map[MAX_X-1][j+1])
-					count++;
-			}
-			else {
-				if (map[i-1][j+1])
-					count++;
-				}
+
 
 			states[i][j] = count;
 		}	
 	}
 
-	for(var i =0; i < MAX_X - 1; i ++){
-		for(var j =1; j < MAX_Y - 1; j ++){
+	for(var i =0; i < MAX_X; i ++){
+		for(var j =0; j < MAX_Y; j ++){
 			if (map[i][j] == false){
 				if (states[i][j] == 3)
 					map[i][j] = true;
